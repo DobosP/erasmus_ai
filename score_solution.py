@@ -196,8 +196,8 @@ def main():
 
     correct_res = train_data[['AdoptionSpeed', 'PetID']]
 
-    correct_res.sort_values(['AdoptionSpeed'], ascending=True)
-    submision.sort_values(['AdoptionSpeed'], ascending=True)
+    correct_res.sort_values(['PetID'], ascending=True)
+    submision.sort_values(['PetID'], ascending=True)
 
     kappa_indicator = kappa(
         submision['AdoptionSpeed'].values.tolist(),
