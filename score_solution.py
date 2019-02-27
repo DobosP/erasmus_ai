@@ -176,18 +176,24 @@ def kappa(rater_a, rater_b, min_rating=None, max_rating=None):
     return 1.0 - numerator / denominator
 
 
-def main():
+def score_submision(
+    submision: str,
+    train_data: str,
+    percent: int
+    ):
+    """Compute kapa score for a dataset and a prediction.
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("submision", help="Your results")
-    parser.add_argument("train_data", help="Train data")
-    parser.add_argument("percent", type=int,
-                    help="Percent of data for testing data")
-    args = parser.parse_args()
+    Args:
+        submision: Path to submision file.
+        train_data: Path to train data.
+        percent: percent of data use for testing.
 
-    submision = pd.read_csv(args.submision)
-    train_data = pd.read_csv(args.train_data)
-    percent = args.percent
+    Returns:
+        Kapa score.
+    """
+
+    submision = pd.read_csv(submision)
+    train_data = pd.read_csv(train_data)
 
     size_data_train = len(train_data)
     truncate_point = int(size_data_train*(float(100 - percent)/100))
@@ -204,7 +210,27 @@ def main():
         correct_res['AdoptionSpeed'].values.tolist(),
         0,4)
 
-    print("Final result: ",kappa_indicator)
+    return kappa_indicator
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("submision", help="Your results")
+    parser.add_argument("train_data", help="Train data")
+    parser.add_argument("percent", type=int,
+                    help="Percent of data for testing data")
+    args = parser.parse_args()
+
+    submision = args.submision
+    train_data = args.train_data
+    percent = args.percent
+
+    print("Kapa score: {}".format(score_submision(
+        submision,
+        train_data,
+        percent
+    )))
+
 
 
 
