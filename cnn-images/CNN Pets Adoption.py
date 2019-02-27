@@ -132,7 +132,7 @@ def resize_image(path):
 
 
 def read_image(path):
-    image = Image.open(path)
+    image = Image.open(path).convert('RGB')
     return np.asarray(image)
 
 
@@ -189,17 +189,15 @@ def load_pet_images(df, inputDir):
         img_path = inputDir + row['PetID'] + '.jpg'
     
         resized = read_image(img_path)
-        #TODO
-        outputImage = resized
         
         # add the image to the set of images the network will be trained on
-        images.append(outputImage)
+        images.append(resized)
 
     # return our set of images
     return np.array(images)
 
 
-# In[5]:
+# In[ ]:
 
 
 # import the necessary packages
@@ -245,7 +243,7 @@ model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
 # train the model
 print("[INFO] training model...")
 model.fit(trainImagesX, trainY, validation_data=(testImagesX, testY),
-          epochs=200, batch_size=8)
+          epochs=10, batch_size=8)
 
 # make predictions on the testing data
 print("[INFO] predicting pet adoption speed...")
@@ -265,7 +263,7 @@ std = np.std(absPercentDiff)
 
 # finally, show some statistics on our model
 locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-print("[INFO] avg. house price: {}, std house price: {}".format(
+print("[INFO] avg. adoption speed: {}, std adoption speed: {}".format(
     locale.currency(df["AdoptionSpeed"].mean(), grouping=True),
     locale.currency(df["AdoptionSpeed"].std(), grouping=True)))
 print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
