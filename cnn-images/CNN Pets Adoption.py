@@ -15,6 +15,10 @@
 # Installing Keras
 # pip install --upgrade keras
 
+#IMAGES_PATH = 'C:/Users/madad/Documents/dataset/images/resized/'
+RESIZED_IMAGES_PATH = 'C:/Users/madad/Documents/dataset/images/resized/'
+CSV_PATH = 'C:/Users/madad/Documents/dataset/train.csv'
+
 
 # In[2]:
 
@@ -125,7 +129,7 @@ def resize_image(path):
     # Uncomment to save to local directory 
     # Get image name
     name=os.path.basename(path)
-    resized_image.save('C:/Users/madad/Documents/dataset/images/res1/' + name, "JPEG")
+    resized_image.save(RESIZED_IMAGES_PATH + name, "JPEG")
 
     # new_image size (64,64)
     return np.asarray(resized_image)
@@ -136,7 +140,7 @@ def read_image(path):
     return np.asarray(image)
 
 
-# In[4]:
+# In[ ]:
 
 
 # Load data helpers
@@ -210,13 +214,13 @@ import locale
 # construct the path to the train.csv file that contains information
 # on each pet in the dataset and then load the dataset
 print("[INFO] loading pet features...")
-df = load_pet_attributes('C:/Users/madad/Documents/dataset/train.csv')
+df = load_pet_attributes(CSV_PATH)
 print("[INFO] processed features")
 
 # load the pet images and then scale the pixel intensities to the
 # range [0, 1]
 print("[INFO] loading pet images...")
-images = load_pet_images(df, 'C:/Users/madad/Documents/dataset/images/resized/')
+images = load_pet_images(df, RESIZED_IMAGES_PATH)
 images = images / 255.0
 print("[INFO] processed images")
 
@@ -238,12 +242,12 @@ testY = testAttrX["AdoptionSpeed"] / maxAdoption
 # adoption speed *predictions* and the *actual adoption speeds*
 model = create_cnn(64, 64, 3, regress=True)
 opt = Adam(lr=1e-3, decay=1e-3 / 200)
-model.compile(loss="mean_absolute_percentage_error", optimizer=opt)
+model.compile(optimizer=opt, loss="mean_absolute_percentage_error", metrics = ['accuracy'])
 
 # train the model
 print("[INFO] training model...")
-model.fit(trainImagesX, trainY, validation_data=(testImagesX, testY),
-          epochs=10, batch_size=8)
+history = model.fit(trainImagesX, trainY, validation_data=(testImagesX, testY),
+          epochs=10, batch_size=64)
 
 # make predictions on the testing data
 print("[INFO] predicting pet adoption speed...")
@@ -264,9 +268,34 @@ std = np.std(absPercentDiff)
 # finally, show some statistics on our model
 locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 print("[INFO] avg. adoption speed: {}, std adoption speed: {}".format(
-    locale.currency(df["AdoptionSpeed"].mean(), grouping=True),
-    locale.currency(df["AdoptionSpeed"].std(), grouping=True)))
+    df["AdoptionSpeed"].mean(),
+    df["AdoptionSpeed"].std()))
 print("[INFO] mean: {:.2f}%, std: {:.2f}%".format(mean, std))
+
+
+# In[ ]:
+
+
+import matplotlib.pyplot as plt
+
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 
 # In[ ]:
@@ -279,6 +308,6 @@ model_json = model.to_json()
 with open("model.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-classifier.save_weights("model.h5")
+model.save_weights("model.h5")
 print("Saved model to disk")
 
