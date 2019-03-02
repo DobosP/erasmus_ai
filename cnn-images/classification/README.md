@@ -1,6 +1,27 @@
 # Image Processing Classification Problem
 
-## Trained the model 15 epochs, image sizes 64x64, obtained 80% accuracy, 46% loss. The model did not improve too much during training.
+## CNN Summary
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_1 (Conv2D)            (None, 62, 62, 20)        560       
+_________________________________________________________________
+max_pooling2d_1 (MaxPooling2 (None, 31, 31, 20)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 29, 29, 20)        3620      
+_________________________________________________________________
+max_pooling2d_2 (MaxPooling2 (None, 14, 14, 20)        0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 3920)              0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 128)               501888    
+_________________________________________________________________
+dense_2 (Dense)              (None, 5)                 645       
+=================================================================
+Total params: 506,713
+Trainable params: 506,713
+Non-trainable params: 0
+
+## Trained the model 15 epochs, image sizes 64x64, obtained 80% accuracy, 46% loss. The model did not improve during training (overfitting).
 
 Epoch 1/15
 312/312 [==============================] - 162s 520ms/step - loss: 0.4721 - acc: 0.7989 - val_loss: 0.4658 - val_acc: 0.8000
