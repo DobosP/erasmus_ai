@@ -8,3 +8,4 @@
 5. temp_size	
 6. width	
 7. height
+8. blurry - Laplacian Filter which can be used to measure the image blurryness score
