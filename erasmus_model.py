@@ -651,5 +651,5 @@ final_ans =  weighted_voting(predictions, weights)
 submission = pd.DataFrame({'PetID': test_ids['PetID'].values,
                            'AdoptionSpeed': final_ans
                           })
-submission.head()
+# submission.head()
 submission.to_csv('submission.csv', index=False)
