@@ -4,6 +4,7 @@
 Here are the latest versions of the kernels used as final submissions.
 
 ## Data analysis
+  - exploring the data and plotting relevant information(data-analysis)
 
 ## Feature engineering
 
