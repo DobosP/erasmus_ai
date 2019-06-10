@@ -23,7 +23,7 @@ For the combined models approach we used next kernels.
 
   - tunning-bayes-search-catmodel
 
-## More model
+## More models
   - id-cnn-train1
   - model-tuning-adaboost
   - model-tuning-rf
