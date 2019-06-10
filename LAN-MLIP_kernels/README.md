@@ -22,3 +22,6 @@ For the combined models approach we used next kernels.
 ## Single model
 
   - tunning-bayes-search-catmodel
+
+## NN model
+  - id-cnn-train1
